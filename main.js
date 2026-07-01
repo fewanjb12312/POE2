@@ -5,6 +5,7 @@ const path = require("path");
 
 let mainWindow;
 let locked = false;
+let overlayShown = false;
 
 const bundledDataDir = path.join(__dirname, "data");
 const bundledChecklistPath = path.join(bundledDataDir, "checklist.json");
@@ -132,6 +133,7 @@ function createWindow() {
     minWidth: 360,
     minHeight: 72,
     frame: false,
+    show: false,
     transparent: true,
     resizable: false,
     alwaysOnTop: true,
@@ -153,16 +155,32 @@ function createWindow() {
   });
 }
 
+function showOverlay() {
+  if (!mainWindow || overlayShown) return;
+
+  overlayShown = true;
+  mainWindow.show();
+}
+
 function setupAutoUpdater() {
-  if (!app.isPackaged) return;
+  if (!app.isPackaged) {
+    showOverlay();
+    return;
+  }
 
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.on("update-not-available", showOverlay);
+  autoUpdater.on("error", (error) => {
+    console.error("Update check failed:", error);
+    showOverlay();
+  });
   autoUpdater.on("update-downloaded", () => {
     autoUpdater.quitAndInstall(true, true);
   });
   autoUpdater.checkForUpdatesAndNotify().catch((error) => {
     console.error("Update check failed:", error);
+    showOverlay();
   });
 }
 
