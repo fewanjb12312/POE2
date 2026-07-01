@@ -1,4 +1,5 @@
 const { app, BrowserWindow, globalShortcut, ipcMain, shell } = require("electron");
+const { autoUpdater } = require("electron-updater");
 const fs = require("fs");
 const path = require("path");
 
@@ -120,9 +121,20 @@ function createWindow() {
   });
 }
 
+function setupAutoUpdater() {
+  if (!app.isPackaged) return;
+
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.checkForUpdatesAndNotify().catch((error) => {
+    console.error("Update check failed:", error);
+  });
+}
+
 app.whenReady().then(() => {
   ensureDataFile();
   createWindow();
+  setupAutoUpdater();
 
   globalShortcut.register("CommandOrControl+Shift+O", () => {
     if (!mainWindow) return;

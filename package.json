@@ -1,13 +1,20 @@
 {
   "name": "poe2-checklist-overlay",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "A small always-on-top checklist overlay for games.",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fewanjb12312/POE2.git"
+  },
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --win",
     "dist:portable": "electron-builder --win portable"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9"
   },
   "devDependencies": {
     "electron": "^31.7.7",
@@ -19,6 +26,13 @@
     "directories": {
       "output": "release"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "fewanjb12312",
+        "repo": "POE2"
+      }
+    ],
     "files": [
       "main.js",
       "preload.js",
