@@ -18,6 +18,7 @@ let state = {
   opacity: 0.8,
   category: "runes",
   selectedRunes: [],
+  runeWidth: null,
   items: [],
   memo: ""
 };
@@ -49,14 +50,15 @@ function getCategoryBounds(category) {
   if (category === "runes") {
     const itemCount = Math.max(1, runes.length);
     const itemAreaWidth = itemCount * runeLayout.itemWidth + (itemCount - 1) * runeLayout.itemGap;
-    const width =
+    const defaultWidth =
       runeLayout.leftChromeWidth +
       runeLayout.contentPaddingWidth +
       runeLayout.resizeHandleWidth +
       itemAreaWidth;
+    const savedWidth = Number(state.runeWidth);
 
     return {
-      width: Math.max(runeLayout.minWidth, Math.ceil(width)),
+      width: Math.max(runeLayout.minWidth, Math.ceil(Number.isFinite(savedWidth) ? savedWidth : defaultWidth)),
       height: runeLayout.height
     };
   }
@@ -291,8 +293,10 @@ window.addEventListener("pointermove", (event) => {
   });
 });
 
-window.addEventListener("pointerup", () => {
-  if (resizing) {
+window.addEventListener("pointerup", async () => {
+  const wasResizing = resizing;
+
+  if (wasResizing) {
     setBarHeight(window.innerHeight);
   }
 
@@ -304,6 +308,12 @@ window.addEventListener("pointerup", () => {
   }
 
   resizePointerId = null;
+
+  if (wasResizing && state.category === "runes") {
+    const bounds = await window.overlayApi.getWindowBounds();
+    state.runeWidth = bounds.width;
+    await save();
+  }
 });
 
 window.addEventListener("resize", () => {

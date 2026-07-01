@@ -20,6 +20,7 @@ function defaultChecklist() {
     opacity: 0.8,
     category: "runes",
     selectedRunes: [],
+    runeWidth: null,
     windowBounds: null,
     items: [],
     memo: ""
