@@ -27,12 +27,40 @@ let resizePointerId = null;
 let compactHeight = 0;
 
 const categoryBounds = {
-  runes: { width: 2000, height: 72 },
   rumors: { width: 1250, height: 390 },
   tablets: { width: 900, height: 72 }
 };
 
-const tabletTradeUrl = "https://poe.kakaogames.com/trade2/search/poe2/Runes%20of%20Aldur/wvwmeLbjhb";
+const runeLayout = {
+  leftChromeWidth: 60,
+  contentPaddingWidth: 16,
+  resizeHandleWidth: 28,
+  itemWidth: 52,
+  itemGap: 6,
+  minWidth: 360,
+  height: 72
+};
+
+const tabletTradeUrl = "https://poe.kakaogames.com/trade2/search/poe2/Runes%20of%20Aldur/Lg7GOpn7tn";
+
+function getCategoryBounds(category) {
+  if (category === "runes") {
+    const itemCount = Math.max(1, runes.length);
+    const itemAreaWidth = itemCount * runeLayout.itemWidth + (itemCount - 1) * runeLayout.itemGap;
+    const width =
+      runeLayout.leftChromeWidth +
+      runeLayout.contentPaddingWidth +
+      runeLayout.resizeHandleWidth +
+      itemAreaWidth;
+
+    return {
+      width: Math.max(runeLayout.minWidth, Math.ceil(width)),
+      height: runeLayout.height
+    };
+  }
+
+  return categoryBounds[category];
+}
 
 function runePath(file) {
   return `assets/runes/${encodeURIComponent(file)}`;
@@ -225,7 +253,7 @@ categoryMenu.addEventListener("click", async (event) => {
 
   state.category = nextCategory;
   closeMenu();
-  const bounds = categoryBounds[state.category];
+  const bounds = getCategoryBounds(state.category);
   if (bounds) {
     compactHeight = bounds.height;
     setBarHeight(bounds.height);
@@ -293,7 +321,7 @@ document.addEventListener("click", (event) => {
     : [state.selectedRune].filter(Boolean);
   delete state.selectedRune;
   state.opacity = Number(state.opacity ?? 0.8);
-  const bounds = categoryBounds[state.category];
+  const bounds = getCategoryBounds(state.category);
   if (bounds) {
     compactHeight = bounds.height;
     setBarHeight(bounds.height);
