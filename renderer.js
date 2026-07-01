@@ -3,6 +3,7 @@ const menuButton = document.querySelector("#menuButton");
 const clearSelectionButton = document.querySelector("#clearSelectionButton");
 const categoryMenu = document.querySelector("#categoryMenu");
 const opacityInput = document.querySelector("#opacityInput");
+const versionLabel = document.querySelector("#versionLabel");
 const itemGrid = document.querySelector("#itemGrid");
 const resizeHandle = document.querySelector("#resizeHandle");
 
@@ -314,6 +315,7 @@ document.addEventListener("click", (event) => {
 (async function init() {
   runes = await window.overlayApi.listRunes();
   rumorData = await window.overlayApi.listRumors();
+  versionLabel.textContent = `v${await window.overlayApi.getAppVersion()}`;
   state = await window.overlayApi.loadChecklist();
   state.category = normalizeCategory(state.category || state.activeWindow);
   state.selectedRunes = Array.isArray(state.selectedRunes)

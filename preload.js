@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld("overlayApi", {
   saveChecklist: (data) => ipcRenderer.invoke("checklist:save", data),
   listRunes: () => ipcRenderer.invoke("runes:list"),
   listRumors: () => ipcRenderer.invoke("rumors:list"),
+  getAppVersion: () => ipcRenderer.invoke("app:get-version"),
   openExternal: (url) => ipcRenderer.invoke("external:open", url),
   getWindowBounds: () => ipcRenderer.invoke("window:get-bounds"),
   setMenuOpen: (payload) => ipcRenderer.send("window:set-menu-open", payload),

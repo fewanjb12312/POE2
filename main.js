@@ -168,6 +168,7 @@ app.whenReady().then(() => {
   });
   ipcMain.handle("runes:list", () => listRunes());
   ipcMain.handle("rumors:list", () => listRumors());
+  ipcMain.handle("app:get-version", () => app.getVersion());
   ipcMain.handle("external:open", (_event, url) => shell.openExternal(url));
   ipcMain.handle("window:get-bounds", () => mainWindow.getBounds());
   ipcMain.on("window:set-menu-open", (_event, payload) => {
