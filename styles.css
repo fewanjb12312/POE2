@@ -169,6 +169,21 @@ body:not([data-category="runes"]) .reset-button {
   width: 100%;
 }
 
+.quit-button {
+  height: 24px;
+  margin: 3px 4px 0;
+  border: 0;
+  border-radius: 4px;
+  color: #f6f1df;
+  background: rgba(255, 95, 95, 0.26);
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.quit-button:hover {
+  background: rgba(255, 95, 95, 0.42);
+}
+
 .version-label {
   padding: 2px 4px 1px;
   color: rgba(216, 222, 234, 0.76);

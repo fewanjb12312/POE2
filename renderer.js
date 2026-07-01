@@ -3,6 +3,7 @@ const menuButton = document.querySelector("#menuButton");
 const clearSelectionButton = document.querySelector("#clearSelectionButton");
 const categoryMenu = document.querySelector("#categoryMenu");
 const opacityInput = document.querySelector("#opacityInput");
+const quitButton = document.querySelector("#quitButton");
 const versionLabel = document.querySelector("#versionLabel");
 const itemGrid = document.querySelector("#itemGrid");
 const resizeHandle = document.querySelector("#resizeHandle");
@@ -238,6 +239,10 @@ clearSelectionButton.addEventListener("click", async () => {
   state.selectedRunes = [];
   updateSelectedRune();
   await save();
+});
+
+quitButton.addEventListener("click", () => {
+  window.overlayApi.quitApp();
 });
 
 categoryMenu.addEventListener("click", async (event) => {

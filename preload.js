@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld("overlayApi", {
   setMenuOpen: (payload) => ipcRenderer.send("window:set-menu-open", payload),
   setCategoryBounds: (payload) => ipcRenderer.send("window:set-category-bounds", payload),
   resizeWindowTo: (point) => ipcRenderer.send("window:resize-to", point),
+  quitApp: () => ipcRenderer.send("app:quit"),
   getLock: () => ipcRenderer.invoke("overlay:get-lock"),
   setLock: (locked) => ipcRenderer.invoke("overlay:set-lock", locked),
   onLockChanged: (callback) => {

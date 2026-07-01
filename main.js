@@ -6,54 +6,88 @@ const path = require("path");
 let mainWindow;
 let locked = false;
 
-const dataDir = path.join(__dirname, "data");
-const dataPath = path.join(dataDir, "checklist.json");
-const rumorsPath = path.join(dataDir, "rumors.json");
+const bundledDataDir = path.join(__dirname, "data");
+const bundledChecklistPath = path.join(bundledDataDir, "checklist.json");
+const rumorsPath = path.join(bundledDataDir, "rumors.json");
 const runesDir = path.join(__dirname, "assets", "runes");
+
+function settingsPath() {
+  return path.join(app.getPath("userData"), "checklist.json");
+}
 
 function defaultChecklist() {
   return {
     opacity: 0.8,
     category: "runes",
     selectedRunes: [],
+    windowBounds: null,
     items: [],
     memo: ""
   };
 }
 
 function ensureDataFile() {
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+  const userDataDir = app.getPath("userData");
+  const targetPath = settingsPath();
+
+  if (!fs.existsSync(userDataDir)) {
+    fs.mkdirSync(userDataDir, { recursive: true });
   }
 
-  if (!fs.existsSync(dataPath)) {
-    fs.writeFileSync(dataPath, JSON.stringify(defaultChecklist(), null, 2), "utf8");
+  if (!fs.existsSync(targetPath)) {
+    if (fs.existsSync(bundledChecklistPath)) {
+      fs.copyFileSync(bundledChecklistPath, targetPath);
+      return;
+    }
+
+    fs.writeFileSync(targetPath, JSON.stringify(defaultChecklist(), null, 2), "utf8");
   }
 }
 
 function readChecklist() {
   ensureDataFile();
-  return JSON.parse(fs.readFileSync(dataPath, "utf8"));
+
+  try {
+    return { ...defaultChecklist(), ...JSON.parse(fs.readFileSync(settingsPath(), "utf8")) };
+  } catch {
+    return defaultChecklist();
+  }
 }
 
 function writeChecklist(data) {
   ensureDataFile();
-  fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
+  let current = {};
+
+  try {
+    current = JSON.parse(fs.readFileSync(settingsPath(), "utf8"));
+  } catch {
+    current = {};
+  }
+
+  fs.writeFileSync(settingsPath(), JSON.stringify({ ...defaultChecklist(), ...current, ...data }, null, 2), "utf8");
+}
+
+function saveWindowBounds() {
+  if (!mainWindow) return;
+
+  const data = readChecklist();
+  data.windowBounds = mainWindow.getBounds();
+  writeChecklist(data);
 }
 
 function listRunes() {
   if (!fs.existsSync(runesDir)) return [];
 
   const priority = [
-    "풍요룬",
-    "시간룬",
-    "부활룬",
-    "유대룬",
-    "서약룬",
-    "죽음룬",
-    "생명룬",
-    "영혼룬",
-    "권능룬"
+    "\uD48D\uC694\uB8EC",
+    "\uC2DC\uAC04\uB8EC",
+    "\uBD80\uD65C\uB8EC",
+    "\uC720\uB300\uB8EC",
+    "\uC11C\uC57D\uB8EC",
+    "\uC8FD\uC74C\uB8EC",
+    "\uC0DD\uBA85\uB8EC",
+    "\uC601\uD63C\uB8EC",
+    "\uAD8C\uB2A5\uB8EC"
   ];
 
   return fs
@@ -63,18 +97,8 @@ function listRunes() {
       file,
       name: path.basename(file, path.extname(file))
     }))
-    .sort((left, right) => {
-      const leftPriority = priority.indexOf(left.name);
-      const rightPriority = priority.indexOf(right.name);
-
-      if (leftPriority !== -1 || rightPriority !== -1) {
-        if (leftPriority === -1) return 1;
-        if (rightPriority === -1) return -1;
-        return leftPriority - rightPriority;
-      }
-
-      return left.name.localeCompare(right.name, "ko");
-    });
+    .filter((rune) => priority.includes(rune.name))
+    .sort((left, right) => priority.indexOf(left.name) - priority.indexOf(right.name));
 }
 
 function listRumors() {
@@ -97,9 +121,13 @@ function setLocked(nextLocked) {
 }
 
 function createWindow() {
+  const savedBounds = readChecklist().windowBounds;
+
   mainWindow = new BrowserWindow({
-    width: 2000,
-    height: 72,
+    width: savedBounds?.width || 2000,
+    height: savedBounds?.height || 72,
+    x: Number.isFinite(savedBounds?.x) ? savedBounds.x : undefined,
+    y: Number.isFinite(savedBounds?.y) ? savedBounds.y : undefined,
     minWidth: 360,
     minHeight: 72,
     frame: false,
@@ -116,6 +144,9 @@ function createWindow() {
   mainWindow.setAlwaysOnTop(true, "screen-saver");
   mainWindow.loadFile("index.html");
 
+  mainWindow.on("move", saveWindowBounds);
+  mainWindow.on("resize", saveWindowBounds);
+  mainWindow.on("close", saveWindowBounds);
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
@@ -171,6 +202,7 @@ app.whenReady().then(() => {
   ipcMain.handle("app:get-version", () => app.getVersion());
   ipcMain.handle("external:open", (_event, url) => shell.openExternal(url));
   ipcMain.handle("window:get-bounds", () => mainWindow.getBounds());
+  ipcMain.on("app:quit", () => app.quit());
   ipcMain.on("window:set-menu-open", (_event, payload) => {
     if (!mainWindow) return;
 
