@@ -157,6 +157,9 @@ function setupAutoUpdater() {
 
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.on("update-downloaded", () => {
+    autoUpdater.quitAndInstall(true, true);
+  });
   autoUpdater.checkForUpdatesAndNotify().catch((error) => {
     console.error("Update check failed:", error);
   });
