@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POE2 Overlay</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="overlay" id="overlay">
+      <div class="drag-bar" title="Move"></div>
+
+      <div class="tool-strip">
+        <button id="menuButton" class="icon-button" type="button" title="Menu">&#9881;</button>
+        <button id="clearSelectionButton" class="reset-button" type="button" title="Clear selection">&#8635;</button>
+        <div id="categoryMenu" class="category-menu" hidden>
+          <button data-category="runes" type="button">룬</button>
+          <button data-category="rumors" type="button">소문</button>
+          <button data-category="tablets" type="button">서판 구매</button>
+          <div class="menu-divider"></div>
+          <label class="opacity-control">
+            <span>투명도</span>
+            <input id="opacityInput" type="range" min="0" max="100" value="80" />
+          </label>
+        </div>
+      </div>
+
+      <section class="content">
+        <div id="itemGrid" class="item-grid" aria-label="Overlay items"></div>
+      </section>
+
+      <div id="resizeHandle" class="resize-handle" title="Resize"></div>
+    </main>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

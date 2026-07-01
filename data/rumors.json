@@ -1,0 +1,64 @@
+{
+  "headers": [
+    "소문 (Rumor)",
+    "지도 종류 (Map Type)",
+    "주요 특징 / 기믹 (Mods)"
+  ],
+  "items": [
+    {
+      "rumor": "떨어진 별 (Fallen Stars)",
+      "mapType": "무너진 하늘의 황야 (Moor)",
+      "mods": "룬스톤 추가 (Runestones)"
+    },
+    {
+      "rumor": "얼음장처럼 추운 곳... (Cold as ice)",
+      "mapType": "차디찬 절벽 (Frigid Bluffs)",
+      "mods": "기존 탐험 방식/보상 극대화 (Old Expedition)"
+    },
+    {
+      "rumor": "흡수할 것이 없다... (Nothing to drink)",
+      "mapType": "고인 분지 (Stagnant Basin)",
+      "mods": "유전/기름 연쇄 폭발 (Oil)"
+    },
+    {
+      "rumor": "끝없는 계곡... (Endless Cliffs)",
+      "mapType": "바위투성이 반도 (Craggy Peninsula)",
+      "mods": "아이템 희귀도 / 탈주 유배자 (Rarity / Rogue Exiles)"
+    },
+    {
+      "rumor": "아황산염! (Sulphite!)",
+      "mapType": "그을린 암초 (Scorched Cay)",
+      "mods": "아이템 희귀도 증가 (Increased Rarity)"
+    },
+    {
+      "rumor": "무언가 수상하다... (Something Fishy)",
+      "mapType": "표백된 모래톱 (Bleached Shoals)",
+      "mods": "골드 보상 (Gold)"
+    },
+    {
+      "rumor": "알려지지 않은 유적... (Unknown Ruins)",
+      "mapType": "파헤쳐진 폐허 (Exhumed Ruins)",
+      "mods": "선구자 지맥 폭파 (Precursor Leylines)"
+    },
+    {
+      "rumor": "따뜻하지만 위험하다... (It's Warm)",
+      "mapType": "우거진 섬 (Lush Island)",
+      "mods": "경험치 / 이계 / 대형 상자 (Exp / Beyond / Hoards)"
+    },
+    {
+      "rumor": "적어도 축축하지는 않다... (It's dry at least)",
+      "mapType": "진창이 된 고랑 (Sloughed Gully)",
+      "mods": "버그 맵"
+    },
+    {
+      "rumor": "자유로이 활보하는 야생... (Wild, Roaming Free)",
+      "mapType": "풀이 뜯긴 프레리 (Grazed Praire)",
+      "mods": "아즈메리 혼백 (Azmeri Spirits)"
+    },
+    {
+      "rumor": "음산하고 끔찍한 곳... (Bleak and Awful)",
+      "mapType": "불모의 산호섬 (Barren Atoll)",
+      "mods": "버그 맵"
+    }
+  ]
+}

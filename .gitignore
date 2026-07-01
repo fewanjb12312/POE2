@@ -1,0 +1,10 @@
+node_modules/
+release/
+.npm-cache/
+.electron-cache/
+.localappdata/
+.appdata/
+tools/
+*.msi
+*.zip
+*.log
