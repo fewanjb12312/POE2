@@ -131,9 +131,25 @@ function setupAutoUpdater() {
   });
 }
 
+function ensureDesktopShortcut() {
+  if (process.platform !== "win32" || !app.isPackaged) return;
+
+  const shortcutPath = path.join(app.getPath("desktop"), "POE2 Checklist Overlay.lnk");
+
+  shell.writeShortcutLink(shortcutPath, "create", {
+    target: process.execPath,
+    cwd: path.dirname(process.execPath),
+    description: "POE2 Checklist Overlay",
+    icon: process.execPath,
+    iconIndex: 0,
+    appUserModelId: "com.local.poe2-checklist-overlay"
+  });
+}
+
 app.whenReady().then(() => {
   ensureDataFile();
   createWindow();
+  ensureDesktopShortcut();
   setupAutoUpdater();
 
   globalShortcut.register("CommandOrControl+Shift+O", () => {
